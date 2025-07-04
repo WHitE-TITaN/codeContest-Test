@@ -62,19 +62,16 @@ class Game {
         sort(health.begin(), health.end());
         int points = 0;
         
-        for (int i = 0; i < n; ++i) {
-          if(health[i] <= 0) {
+        for(int i = 0; i < n; ++i){
+          if(health[i] == 0) {
             points++;
           }
-          else{
-            int numberOfAttacks = health[i] / a;
-            if(k >= numberOfAttacks){
-              points++;
-              k -= numberOfAttacks;
-            }
+          else if(k >= health[i]){
+            points++;
+            k -= health[i];
           }
         }
-        return points;
+      return points;
     }
 };
 
@@ -88,8 +85,11 @@ int main(){
   for (int i = 0; i < n; ++i) { 
     int buffer;
     cin >> buffer;
-    int remainder = buffer % (a + b);
-    health[i] = remainder != 0 ? remainder - a : ceil((double)b / a); 
+    buffer = buffer % (a + b);
+    if(buffer == 0) buffer = a + b;
+
+    int extraHits = ceil((double)buffer / a) - 1;
+    health[i] = extraHits;
   }
 
   Game killthemonsters;
