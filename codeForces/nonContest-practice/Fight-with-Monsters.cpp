@@ -1,0 +1,97 @@
+/*
+There are n monsters standing in a row numbered from 1 to n The i-th monster has hi health points (hp). You have your attack power equal to a
+hp and your opponent has his attack power equal to b hp.
+You and your opponent are fighting these monsters. Firstly, you and your opponent go to the first monster and fight it till his death, then you and your opponent go the second monster and fight it till his death, and so on. A monster is considered dead if its hp is less than or equal to 0
+
+The fight with a monster happens in turns.
+
+You hit the monster by a
+ hp. If it is dead after your hit, you gain one point and you both proceed to the next monster.
+Your opponent hits the monster by b
+ hp. If it is dead after his hit, nobody gains a point and you both proceed to the next monster.
+You have some secret technique to force your opponent to skip his turn. You can use this technique at most k
+ times in total (for example, if there are two monsters and k=4
+, then you can use the technique 2
+ times on the first monster and 1
+ time on the second monster, but not 2
+ times on the first monster and 3
+ times on the second monster).
+
+Your task is to determine the maximum number of points you can gain if you use the secret technique optimally.
+
+Input
+The first line of the input contains four integers n,a,b
+and k (1≤n≤2⋅105,1≤a,b,k≤109 ) — the number of monsters, your attack power, 
+the opponent's attack power and the number of times you can use the secret technique.
+
+The second line of the input contains n
+ integers h1,h2,…,hn
+ (1≤hi≤109
+), where hi
+ is the health points of the i
+-th monster.
+
+Output
+Print one integer — the maximum number of points you can gain if you use the secret technique optimally.
+
+Examples
+
+6 2 3 3
+7 10 50 12 1 8
+5
+
+1 1 100 99
+100
+1
+
+7 4 2 1
+1 3 5 4 2 7 6
+6
+*/
+
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <algorithm>
+
+using namespace std;
+
+class Game {
+  public:
+    int maxPointes(int n, int a, int b, int k, vector<int>& health) {
+        sort(health.begin(), health.end());
+        int points = 0;
+        
+        for (int i = 0; i < n; ++i) {
+          if(health[i] <= 0) {
+            points++;
+          }
+          else{
+            int numberOfAttacks = health[i] / a;
+            if(k >= numberOfAttacks){
+              points++;
+              k -= numberOfAttacks;
+            }
+          }
+        }
+        return points;
+    }
+};
+
+
+int main(){ 
+  int n, a, b, k;
+  cin >> n >> a >> b >> k;
+  cin.ignore();
+
+  vector<int> health(n);
+  for (int i = 0; i < n; ++i) { 
+    int buffer;
+    cin >> buffer;
+    int remainder = buffer % (a + b);
+    health[i] = remainder != 0 ? remainder - a : ceil((double)b / a); 
+  }
+
+  Game killthemonsters;
+  cout<<killthemonsters.maxPointes(n, a, b, k, health)<<"\n";
+}
