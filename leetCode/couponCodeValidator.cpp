@@ -74,7 +74,7 @@ private:
     }
     
 public:
-    vector<string> validateCoupons(vector<string>& code, vector<string>& businessLine, vector<bool>& isActive) {
+    Solution(){
         for(int i = 0; i < 26; i++){
             mapper['a' + i] = true;
             mapper['A' + i] = true;
@@ -83,21 +83,27 @@ public:
         for(int i = 0; i < 10; i++){
             mapper['0' + i] = true;
         }
-
+    }
+    
+    vector<string> validateCoupons(vector<string>& code, vector<string>& businessLine, vector<bool>& isActive) {
         mapper['_'] = true;
-        vector<pair<string, pair<bool, int>>> sorter;
+        vector<pair<string, int>> sorter;
         int size = businessLine.size();
         for(int i = 0; i < size; i++){
             if(codeValidator(code[i]) &&
                isActive[i] &&
                businessLineMapper.find(businessLine[i]) != businessLineMapper.end()){
                 
-                sorter.push_back({code[i], {isActive[i], businessLineMapper[businessLine[i]]}});
+                sorter.push_back({code[i], businessLineMapper[businessLine[i]]});
                }
         }
-        sort(sorter.begin(), sorter.end(), [](pair<string, pair<bool, int>>& a,
-                                              pair<string, pair<bool, int>>& b){
-            return a.second.second < b.second.second;});
+        sort(sorter.begin(), sorter.end(), [](pair<string, int>& a,
+                                              pair<string, int>& b){
+             if(a.second != b.second){
+                return a.second < b.second;
+            }
+            return a.first < b.first;
+        });
         
         vector<string> ans;
         for(auto finalAns : sorter){
