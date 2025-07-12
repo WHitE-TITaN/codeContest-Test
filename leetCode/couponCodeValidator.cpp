@@ -57,3 +57,17 @@ public:
     }
 };
 
+int main(){
+    Solution solution;
+    vector<string> code = {"COUPON1", "COUPON2", "COUPON3"};
+    vector<string> businessLine = {"electronics", "grocery", "pharmacy"};
+    vector<bool> isActive = {true, false, true};
+    
+    vector<string> result = solution.validateCoupons(code, businessLine, isActive);
+    
+    for(const string& coupon : result) {
+        cout << coupon << endl;
+    }
+    
+    return 0;
+}
